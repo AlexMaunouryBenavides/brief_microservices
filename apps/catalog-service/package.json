@@ -11,7 +11,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migration:run": "typeorm-ts-node-commonjs migration:run -d src/infrastructure/database/data-source.ts",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/infrastructure/database/data-source.ts",
-    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/infrastructure/database/data-source.ts"
+    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/infrastructure/database/data-source.ts",
+    "seed": "ts-node -r tsconfig-paths/register src/infrastructure/database/seed.ts"
   },
   "dependencies": {
     "@brief-ev/shared": "*",
