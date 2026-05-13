@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   rabbitmq:
     image: rabbitmq:3-management
@@ -79,6 +77,123 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # ── NestJS services ──────────────────────────────────────────────────────────
+
+  user-service:
+    build:
+      context: .
+      dockerfile: apps/user-service/Dockerfile
+    container_name: ev-user-service
+    ports:
+      - '3001:3001'
+    environment:
+      PORT: 3001
+      DB_HOST: mysql-user
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: user_db
+      DB_SYNCHRONIZE: 'true'
+      JWT_SECRET: ${JWT_SECRET:-changeme}
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    depends_on:
+      mysql-user:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  catalog-service:
+    build:
+      context: .
+      dockerfile: apps/catalog-service/Dockerfile
+    container_name: ev-catalog-service
+    ports:
+      - '3002:3002'
+    environment:
+      PORT: 3002
+      DB_HOST: mysql-catalog
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: catalog_db
+      DB_SYNCHRONIZE: 'true'
+    depends_on:
+      mysql-catalog:
+        condition: service_healthy
+    restart: unless-stopped
+
+  cart-service:
+    build:
+      context: .
+      dockerfile: apps/cart-service/Dockerfile
+    container_name: ev-cart-service
+    ports:
+      - '3003:3003'
+    environment:
+      PORT: 3003
+      DB_HOST: mysql-cart
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: cart_db
+      DB_SYNCHRONIZE: 'true'
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      CATALOG_SERVICE_URL: http://catalog-service:3002
+    depends_on:
+      mysql-cart:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  order-service:
+    build:
+      context: .
+      dockerfile: apps/order-service/Dockerfile
+    container_name: ev-order-service
+    ports:
+      - '3004:3004'
+    environment:
+      PORT: 3004
+      DB_HOST: mysql-order
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: order_db
+      DB_SYNCHRONIZE: 'true'
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      CART_SERVICE_URL: http://cart-service:3003
+    depends_on:
+      mysql-order:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── Gateway + Frontend ───────────────────────────────────────────────────────
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: apps/api-gateway/Dockerfile
+    container_name: ev-api-gateway
+    ports:
+      - '3000:3000'
+    environment:
+      PORT: 3000
+      JWT_SECRET: ${JWT_SECRET:-changeme}
+      USER_SERVICE_URL: http://user-service:3001
+      CATALOG_SERVICE_URL: http://catalog-service:3002
+      CART_SERVICE_URL: http://cart-service:3003
+      ORDER_SERVICE_URL: http://order-service:3004
+    depends_on:
+      - user-service
+      - catalog-service
+      - cart-service
+      - order-service
+    restart: unless-stopped
 
   frontend:
     build:

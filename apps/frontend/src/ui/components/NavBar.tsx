@@ -16,30 +16,65 @@ export function NavBar(): JSX.Element {
   };
 
   return (
-    <nav className="bg-white border-b px-6 py-3 flex items-center justify-between">
-      <Link to="/" className="text-lg font-bold text-blue-700">EV Store</Link>
-      <ul className="flex items-center gap-4 text-sm">
-        <li><Link to="/catalog" className="hover:text-blue-600">Catalogue</Link></li>
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100 h-14 px-8 flex items-center justify-between">
+      <Link to="/" className="text-sm font-semibold tracking-[0.2em] uppercase text-zinc-900">
+        EV Store
+      </Link>
+
+      <ul className="flex items-center gap-8 text-sm text-zinc-600">
+        <li>
+          <Link to="/catalog" className="hover:text-zinc-900 transition-colors">
+            Catalogue
+          </Link>
+        </li>
         {isAuthenticated && (
           <>
-            <li><Link to="/cart" className="hover:text-blue-600">Panier</Link></li>
-            <li><Link to="/orders" className="hover:text-blue-600">Commandes</Link></li>
-            <li><Link to="/profile" className="hover:text-blue-600">{user?.firstName ?? 'Profil'}</Link></li>
-            {isAdmin && <li><Link to="/admin" className="hover:text-blue-600">Admin</Link></li>}
             <li>
-              <button onClick={handleLogout} className="text-red-500 hover:underline">
-                Déconnexion
-              </button>
+              <Link to="/cart" className="hover:text-zinc-900 transition-colors">
+                Panier
+              </Link>
+            </li>
+            <li>
+              <Link to="/orders" className="hover:text-zinc-900 transition-colors">
+                Commandes
+              </Link>
             </li>
           </>
         )}
-        {!isAuthenticated && (
+      </ul>
+
+      <div className="flex items-center gap-5 text-sm">
+        {isAuthenticated ? (
           <>
-            <li><Link to="/login" className="hover:text-blue-600">Connexion</Link></li>
-            <li><Link to="/register" className="hover:text-blue-600">Inscription</Link></li>
+            <Link to="/profile" className="text-zinc-600 hover:text-zinc-900 transition-colors">
+              {user?.firstName ?? 'Profil'}
+            </Link>
+            {isAdmin && (
+              <Link to="/admin" className="text-zinc-600 hover:text-zinc-900 transition-colors">
+                Admin
+              </Link>
+            )}
+            <button
+              onClick={handleLogout}
+              className="text-zinc-400 hover:text-zinc-900 transition-colors"
+            >
+              Déconnexion
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="text-zinc-600 hover:text-zinc-900 transition-colors">
+              Connexion
+            </Link>
+            <Link
+              to="/register"
+              className="bg-zinc-900 text-white text-xs px-4 py-2 tracking-wide hover:bg-zinc-700 transition-colors"
+            >
+              Créer un compte
+            </Link>
           </>
         )}
-      </ul>
+      </div>
     </nav>
   );
 }

@@ -1,6 +1,7 @@
 export interface CarOption {
   id: string;
   name: string;
+  description?: string;
   additionalPrice: number;
 }
 
@@ -13,5 +14,6 @@ export interface Car {
   powerKw: number;
   basePrice: number;
   imageUrl: string;
+  description?: string;
   options: CarOption[];
 }

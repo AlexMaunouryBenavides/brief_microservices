@@ -17,7 +17,7 @@ import { OptionEntity } from './infrastructure/database/entities/OptionEntity';
       password: process.env['DB_PASSWORD'] ?? 'root',
       database: process.env['DB_NAME'] ?? 'catalog_db',
       entities: [CarEntity, OptionEntity],
-      synchronize: false,
+      synchronize: process.env['DB_SYNCHRONIZE'] === 'true',
     }),
     CatalogModule,
   ],

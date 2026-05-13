@@ -1,9 +1,7 @@
 import { vi, it, expect, describe, beforeEach } from 'vitest';
-import { act } from '@testing-library/react';
 import { renderHookWithProviders } from '../../../shared/test-utils';
 import { useCart } from './useCart';
 import * as getCartUseCase from '../../../application/use-cases/cart/getCart.usecase';
-import * as removeUseCase from '../../../application/use-cases/cart/addToCart.usecase';
 import type { Cart } from '../../../domain/models/Cart.model';
 
 vi.mock('../../../application/use-cases/cart/getCart.usecase');

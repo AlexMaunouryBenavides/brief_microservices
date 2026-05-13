@@ -17,7 +17,7 @@ import { CartItemEntity } from './infrastructure/database/entities/CartItemEntit
       password: process.env['DB_PASSWORD'] ?? 'root',
       database: process.env['DB_NAME'] ?? 'cart_db',
       entities: [CartEntity, CartItemEntity],
-      synchronize: false,
+      synchronize: process.env['DB_SYNCHRONIZE'] === 'true',
     }),
     CartModule,
   ],

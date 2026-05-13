@@ -2,13 +2,13 @@ import { render, renderHook, type RenderOptions } from '@testing-library/react';
 import type { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, type Reducer, type UnknownAction } from '@reduxjs/toolkit';
 import authReducer from '../application/store/auth.slice';
 import type { RootState } from '../application/store/store';
 
 export function makeTestStore(preloadedState?: Partial<RootState>) {
   return configureStore({
-    reducer: { auth: authReducer },
+    reducer: { auth: authReducer as Reducer<RootState['auth'], UnknownAction, RootState['auth'] | undefined> },
     preloadedState,
   });
 }

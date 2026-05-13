@@ -16,7 +16,7 @@ import { UserEntity } from './infrastructure/database/entities/UserEntity';
       password: process.env['DB_PASSWORD'] ?? 'root',
       database: process.env['DB_NAME'] ?? 'user_db',
       entities: [UserEntity],
-      synchronize: false,
+      synchronize: process.env['DB_SYNCHRONIZE'] === 'true',
     }),
     UserModule,
   ],

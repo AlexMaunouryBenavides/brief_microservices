@@ -5,7 +5,7 @@ COPY package.json package-lock.json tsconfig.json ./
 COPY packages/ packages/
 COPY apps/frontend/ apps/frontend/
 
-RUN npm ci --workspace=apps/frontend
+RUN npm ci 
 RUN npm run build --workspace=apps/frontend
 
 FROM nginx:alpine

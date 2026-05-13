@@ -17,7 +17,7 @@ import { OrderItemEntity } from './infrastructure/database/entities/OrderItemEnt
       password: process.env['DB_PASSWORD'] ?? 'root',
       database: process.env['DB_NAME'] ?? 'order_db',
       entities: [OrderEntity, OrderItemEntity],
-      synchronize: false,
+      synchronize: process.env['DB_SYNCHRONIZE'] === 'true',
     }),
     OrderModule,
   ],
