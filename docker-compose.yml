@@ -80,6 +80,17 @@ services:
       timeout: 5s
       retries: 5
 
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    container_name: ev-frontend
+    ports:
+      - '5173:80'
+    depends_on:
+      - api-gateway
+    restart: unless-stopped
+
 volumes:
   mysql_user_data:
   mysql_catalog_data:
