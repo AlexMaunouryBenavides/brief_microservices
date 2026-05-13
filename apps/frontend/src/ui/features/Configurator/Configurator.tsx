@@ -1,6 +1,8 @@
 import { useConfigurator } from './useConfigurator';
 import { addToCart } from '../../../application/use-cases/cart/addToCart.usecase';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated } from '../../../application/store/auth.selectors';
 
 interface Props {
   carId: string;
@@ -9,6 +11,7 @@ interface Props {
 export function Configurator({ carId }: Props): JSX.Element {
   const { car, selectedOptionIds, toggleOption, currentPrice, isLoading } = useConfigurator(carId);
   const navigate = useNavigate();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   if (isLoading || !car)
     return (
@@ -18,6 +21,10 @@ export function Configurator({ carId }: Props): JSX.Element {
     );
 
   const handleAddToCart = async () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
     await addToCart(carId, selectedOptionIds);
     navigate('/cart');
   };

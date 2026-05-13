@@ -6,8 +6,8 @@ export const getCartApi = async (): Promise<Cart> => {
   return data;
 };
 
-export const addToCartApi = async (carId: string, selectedOptionIds: string[]): Promise<Cart> => {
-  const { data } = await apiClient.post<Cart>('/cart/items', { carId, selectedOptionIds });
+export const addToCartApi = async (carId: string, optionIds: string[]): Promise<Cart> => {
+  const { data } = await apiClient.post<Cart>('/cart/items', { carId, optionIds, quantity: 1 });
   return data;
 };
 
