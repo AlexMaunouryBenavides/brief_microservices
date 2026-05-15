@@ -1,0 +1,52 @@
+OWASP ZAP Baseline Scan — Résultats
+=====================================
+Date : 2026-05-15
+Outil : ZAP stable (ghcr.io/zaproxy/zaproxy:stable)
+
+══════════════════════════════════════════════════════
+CIBLE 1 : http://host.docker.internal:3000 (api-gateway)
+══════════════════════════════════════════════════════
+FAIL-NEW: 0 | WARN-NEW: 1 | PASS: 66
+
+WARN [10049] Storable and Cacheable Content x3
+  → Réponses 404 sans en-tête Cache-Control
+  → http://host.docker.internal:3000
+  → http://host.docker.internal:3000/robots.txt
+  → http://host.docker.internal:3000/sitemap.xml
+
+══════════════════════════════════════════════════════
+CIBLE 2 : http://host.docker.internal:5173 (frontend nginx)
+══════════════════════════════════════════════════════
+FAIL-NEW: 0 | WARN-NEW: 8 | PASS: 59
+
+WARN [10020] Missing Anti-clickjacking Header (X-Frame-Options) x2
+  → http://host.docker.internal:5173
+
+WARN [10021] X-Content-Type-Options Header Missing x5
+  → http://host.docker.internal:5173
+  → http://host.docker.internal:5173/assets/index-*.js
+  → http://host.docker.internal:5173/assets/index-*.css
+
+WARN [10036] Server Leaks Version ("nginx/1.27.4") x5
+  → Toutes les réponses
+
+WARN [10038] Content Security Policy (CSP) Header Not Set x3
+  → http://host.docker.internal:5173
+
+WARN [10049] Storable and Cacheable Content x5
+  → Assets statiques sans Cache-Control approprié
+
+WARN [10063] Permissions-Policy Header Not Set x4
+  → http://host.docker.internal:5173
+
+WARN [10109] Modern Web Application (React SPA détecté) x3
+  → Information seulement
+
+WARN [90004] Cross-Origin-Embedder-Policy Header Missing x10
+  → http://host.docker.internal:5173
+
+══════════════════════════════════════════════════════
+RÉSUMÉ
+══════════════════════════════════════════════════════
+API Gateway : sécurité HTTP excellente (Helmet actif)
+Frontend    : 7 headers de sécurité manquants dans nginx

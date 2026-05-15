@@ -3,8 +3,11 @@ import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { DomainExceptionFilter } from './interface/middlewares/DomainExceptionFilter';
+import { validateEnv } from './common/validate-env';
 
 async function bootstrap(): Promise<void> {
+  validateEnv();
+
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
   app.useGlobalFilters(new DomainExceptionFilter());

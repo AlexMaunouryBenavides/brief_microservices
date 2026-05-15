@@ -1,0 +1,21 @@
+Docker Bench Security — Rapport partiel
+========================================
+Environnement : Docker Desktop for Windows
+Limitation : Docker Bench Security nécessite --pid host et un montage du socket Docker Unix,
+ce qui n'est pas supporté sur Docker Desktop Windows.
+
+Observations manuelles :
+- [WARN] Aucun namespace utilisateur configuré (--userns-remap) pour les conteneurs
+- [WARN] Les conteneurs NestJS tournent en tant que root (pas de USER dans les Dockerfiles)
+- [WARN] Pas de limites de ressources CPU/mémoire définies dans docker-compose.yml
+- [WARN] Pas de politique de restart sécurisée (utilise restart: unless-stopped — acceptable en dev)
+- [WARN] Pas de healthcheck sur les services NestJS
+- [INFO] RabbitMQ management UI (port 15672) non exposé sur l'hôte — OK
+- [INFO] Bases MySQL non exposées sur l'hôte — OK (corrigé dans l'audit applicatif)
+- [INFO] API Gateway seul point d'entrée HTTP — architecture correcte
+
+Actions recommandées :
+1. Ajouter USER node dans tous les Dockerfiles NestJS
+2. Ajouter des limites de ressources dans docker-compose.yml (mem_limit, cpus)
+3. Ajouter des healthchecks sur les services NestJS
+4. En production : utiliser --read-only sur les conteneurs stateless

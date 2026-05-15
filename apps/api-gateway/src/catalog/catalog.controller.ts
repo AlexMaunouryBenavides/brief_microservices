@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -33,13 +34,13 @@ export class CatalogController {
   }
 
   @Get(':id')
-  async getCar(@Param('id') id: string): Promise<unknown> {
+  async getCar(@Param('id', ParseUUIDPipe) id: string): Promise<unknown> {
     return this.proxy.forward('GET', `${CATALOG_SERVICE}/cars/${id}`);
   }
 
   @Get(':id/price')
   async getPrice(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Query('optionIds') optionIds: string | undefined,
   ): Promise<unknown> {
     return this.proxy.forward('GET', `${CATALOG_SERVICE}/cars/${id}/price`, {
@@ -65,7 +66,7 @@ export class CatalogController {
   @Roles('admin')
   async updateCar(
     @Request() req: AuthenticatedRequest,
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() body: unknown,
   ): Promise<unknown> {
     return this.proxy.forward('PUT', `${CATALOG_SERVICE}/cars/${id}`, {
@@ -80,7 +81,7 @@ export class CatalogController {
   @Roles('admin')
   async deleteCar(
     @Request() req: AuthenticatedRequest,
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
   ): Promise<void> {
     await this.proxy.forward('DELETE', `${CATALOG_SERVICE}/cars/${id}`, {
       userRole: req.user.role,
@@ -92,7 +93,7 @@ export class CatalogController {
   @Roles('admin')
   async addOption(
     @Request() req: AuthenticatedRequest,
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() body: unknown,
   ): Promise<unknown> {
     return this.proxy.forward('POST', `${CATALOG_SERVICE}/cars/${id}/options`, {
@@ -106,8 +107,8 @@ export class CatalogController {
   @Roles('admin')
   async updateOption(
     @Request() req: AuthenticatedRequest,
-    @Param('id') id: string,
-    @Param('optionId') optionId: string,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('optionId', ParseUUIDPipe) optionId: string,
     @Body() body: unknown,
   ): Promise<unknown> {
     return this.proxy.forward('PUT', `${CATALOG_SERVICE}/cars/${id}/options/${optionId}`, {
@@ -122,8 +123,8 @@ export class CatalogController {
   @Roles('admin')
   async deleteOption(
     @Request() req: AuthenticatedRequest,
-    @Param('id') id: string,
-    @Param('optionId') optionId: string,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('optionId', ParseUUIDPipe) optionId: string,
   ): Promise<void> {
     await this.proxy.forward(
       'DELETE',

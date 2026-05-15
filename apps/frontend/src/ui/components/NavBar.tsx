@@ -33,7 +33,7 @@ export function NavBar(): JSX.Element {
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100 h-14 px-8 flex items-center justify-between">
-        <Link to="/" className="text-sm font-semibold tracking-[0.2em] uppercase text-zinc-900">
+        <Link to="/" className="font-brand text-xl text-zinc-900">
           EV Store
         </Link>
 
@@ -115,7 +115,7 @@ export function NavBar(): JSX.Element {
       >
         {/* Mobile menu header */}
         <div className="flex items-center justify-between px-8 h-14 border-b border-zinc-800">
-          <Link to="/" className="text-sm font-semibold tracking-[0.2em] uppercase text-white">
+          <Link to="/" className="font-brand text-xl text-white">
             EV Store
           </Link>
           <button

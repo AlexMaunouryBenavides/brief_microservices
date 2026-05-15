@@ -17,14 +17,15 @@ export class DownstreamExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
 
     const downstreamStatus = exception.response?.status ?? HttpStatus.BAD_GATEWAY;
-    const downstreamData = exception.response?.data as Record<string, unknown> | undefined;
+    const raw = exception.response?.data as Record<string, unknown> | null | undefined;
 
-    this.logger.warn(
-      `Downstream error ${downstreamStatus}: ${JSON.stringify(downstreamData)}`,
-    );
+    const safeData = {
+      message: typeof raw?.['message'] === 'string' ? raw['message'] : 'Service error',
+      error: typeof raw?.['error'] === 'string' ? raw['error'] : 'ServiceError',
+    };
 
-    response.status(downstreamStatus).json(
-      downstreamData ?? { message: 'Downstream service error', error: 'BadGateway' },
-    );
+    this.logger.warn(`Downstream error ${downstreamStatus}: ${safeData.error}`);
+
+    response.status(downstreamStatus).json(safeData);
   }
 }

@@ -33,7 +33,7 @@ export function ProfileForm(): JSX.Element {
   const labelClass = 'text-[10px] uppercase tracking-widest text-zinc-400';
 
   return (
-    <form onSubmit={(e) => void handleSubmit(e)} className="flex flex-col gap-6 max-w-sm">
+    <form onSubmit={(e) => void handleSubmit(e)} className="flex flex-col gap-6">
       {success && (
         <p className="text-emerald-600 text-xs tracking-wide">Profil mis à jour.</p>
       )}

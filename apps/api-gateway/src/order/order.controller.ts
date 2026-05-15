@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Request,
   UseGuards,
@@ -40,7 +41,7 @@ export class OrderController {
   @Get(':id')
   async getOrder(
     @Request() req: AuthenticatedRequest,
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
   ): Promise<unknown> {
     return this.proxy.forward('GET', `${ORDER_SERVICE}/orders/${id}`, {
       userId: req.user.sub,

@@ -34,7 +34,7 @@ export function CartView(): JSX.Element {
   };
 
   return (
-    <div className="max-w-2xl">
+    <div>
       <ul className="divide-y divide-zinc-100">
         {cart.items.map((item) => (
           <li key={item.id} className="flex items-start justify-between py-6">

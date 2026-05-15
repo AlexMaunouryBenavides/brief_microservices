@@ -34,6 +34,9 @@ const root = parseEnv(ROOT_ENV);
 const DB_USER = root['DB_USER'] ?? 'root';
 const DB_PASSWORD = root['DB_PASSWORD'] ?? '1234';
 const JWT_SECRET = root['JWT_SECRET'] ?? 'changeme';
+const RABBITMQ_USER = root['RABBITMQ_USER'] ?? 'guest';
+const RABBITMQ_PASS = root['RABBITMQ_PASS'] ?? 'guest';
+const RABBITMQ_URL = `amqp://${RABBITMQ_USER}:${RABBITMQ_PASS}@localhost:5672`;
 
 const services = [
   {
@@ -47,7 +50,7 @@ const services = [
       `DB_NAME=user_db`,
       `DB_SYNCHRONIZE=true`,
       `JWT_SECRET=${JWT_SECRET}`,
-      `RABBITMQ_URL=amqp://guest:guest@localhost:5672`,
+      `RABBITMQ_URL=${RABBITMQ_URL}`,
     ],
   },
   {
@@ -72,7 +75,7 @@ const services = [
       `DB_PASSWORD=${DB_PASSWORD}`,
       `DB_NAME=cart_db`,
       `DB_SYNCHRONIZE=true`,
-      `RABBITMQ_URL=amqp://guest:guest@localhost:5672`,
+      `RABBITMQ_URL=${RABBITMQ_URL}`,
       `CATALOG_SERVICE_URL=http://localhost:3002`,
     ],
   },
@@ -86,7 +89,7 @@ const services = [
       `DB_PASSWORD=${DB_PASSWORD}`,
       `DB_NAME=order_db`,
       `DB_SYNCHRONIZE=true`,
-      `RABBITMQ_URL=amqp://guest:guest@localhost:5672`,
+      `RABBITMQ_URL=${RABBITMQ_URL}`,
       `CART_SERVICE_URL=http://localhost:3003`,
     ],
   },

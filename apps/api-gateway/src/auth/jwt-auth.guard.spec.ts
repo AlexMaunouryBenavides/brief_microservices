@@ -29,7 +29,7 @@ describe('JwtAuthGuard', () => {
     const result = guard.canActivate(ctx);
 
     expect(result).toBe(true);
-    expect(jwtService.verify).toHaveBeenCalledWith('valid.token.here');
+    expect(jwtService.verify).toHaveBeenCalledWith('valid.token.here', { algorithms: ['HS256'] });
     const req = ctx.switchToHttp().getRequest<{ user?: JwtPayload }>();
     expect(req.user).toEqual(validPayload);
   });
@@ -51,5 +51,10 @@ describe('JwtAuthGuard', () => {
   it('throws UnauthorizedException when token is expired', () => {
     jwtService.verify.mockImplementation(() => { throw new Error('jwt expired'); });
     expect(() => guard.canActivate(buildContext('Bearer expired.token'))).toThrow(UnauthorizedException);
+  });
+
+  it('throws UnauthorizedException when token uses a non-HS256 algorithm', () => {
+    jwtService.verify.mockImplementation(() => { throw new Error('invalid algorithm'); });
+    expect(() => guard.canActivate(buildContext('Bearer rs256.signed.token'))).toThrow(UnauthorizedException);
   });
 });

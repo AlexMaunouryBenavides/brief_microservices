@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   Request,
@@ -48,7 +49,7 @@ export class CartController {
   @Patch('items/:itemId')
   async updateItem(
     @Request() req: AuthenticatedRequest,
-    @Param('itemId') itemId: string,
+    @Param('itemId', ParseUUIDPipe) itemId: string,
     @Body() body: unknown,
   ): Promise<unknown> {
     return this.proxy.forward('PATCH', `${CART_SERVICE}/cart/items/${itemId}`, {
@@ -62,7 +63,7 @@ export class CartController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async removeItem(
     @Request() req: AuthenticatedRequest,
-    @Param('itemId') itemId: string,
+    @Param('itemId', ParseUUIDPipe) itemId: string,
   ): Promise<void> {
     await this.proxy.forward('DELETE', `${CART_SERVICE}/cart/items/${itemId}`, {
       userId: req.user.sub,

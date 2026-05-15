@@ -9,6 +9,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { ProxyService } from '../common/proxy.service';
 import { JwtAuthGuard, JwtPayload } from '../auth/jwt-auth.guard';
 
@@ -23,12 +24,14 @@ export class UserController {
   constructor(private readonly proxy: ProxyService) {}
 
   @Post('auth/register')
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   async register(@Body() body: unknown): Promise<unknown> {
     return this.proxy.forward('POST', `${USER_SERVICE}/auth/register`, { body });
   }
 
   @Post('auth/login')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   async login(@Body() body: unknown): Promise<unknown> {
     return this.proxy.forward('POST', `${USER_SERVICE}/auth/login`, { body });
   }

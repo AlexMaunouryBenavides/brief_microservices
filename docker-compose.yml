@@ -6,8 +6,8 @@ services:
       - '5672:5672'
       - '15672:15672'
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
     healthcheck:
       test: ['CMD', 'rabbitmq-diagnostics', 'ping']
       interval: 10s
@@ -79,14 +79,14 @@ services:
       retries: 5
 
   # ── NestJS services ──────────────────────────────────────────────────────────
+  # Ports NestJS non exposés sur l'hôte — tout trafic passe par l'api-gateway
+  # Pour debug direct : docker compose exec <service> sh
 
   user-service:
     build:
       context: .
       dockerfile: apps/user-service/Dockerfile
     container_name: ev-user-service
-    ports:
-      - '3001:3001'
     environment:
       PORT: 3001
       DB_HOST: mysql-user
@@ -94,9 +94,9 @@ services:
       DB_USER: ${DB_USER:-root}
       DB_PASSWORD: ${DB_PASSWORD:-1234}
       DB_NAME: user_db
-      DB_SYNCHRONIZE: 'true'
-      JWT_SECRET: ${JWT_SECRET:-changeme}
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      DB_SYNCHRONIZE: 'true' # DEV ONLY — must be false in production, use migrations
+      JWT_SECRET: ${JWT_SECRET}
+      RABBITMQ_URL: amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASS:-guest}@rabbitmq:5672
     depends_on:
       mysql-user:
         condition: service_healthy
@@ -109,8 +109,6 @@ services:
       context: .
       dockerfile: apps/catalog-service/Dockerfile
     container_name: ev-catalog-service
-    ports:
-      - '3002:3002'
     environment:
       PORT: 3002
       DB_HOST: mysql-catalog
@@ -118,7 +116,7 @@ services:
       DB_USER: ${DB_USER:-root}
       DB_PASSWORD: ${DB_PASSWORD:-1234}
       DB_NAME: catalog_db
-      DB_SYNCHRONIZE: 'true'
+      DB_SYNCHRONIZE: 'true' # DEV ONLY — must be false in production, use migrations
     depends_on:
       mysql-catalog:
         condition: service_healthy
@@ -129,8 +127,6 @@ services:
       context: .
       dockerfile: apps/cart-service/Dockerfile
     container_name: ev-cart-service
-    ports:
-      - '3003:3003'
     environment:
       PORT: 3003
       DB_HOST: mysql-cart
@@ -138,8 +134,8 @@ services:
       DB_USER: ${DB_USER:-root}
       DB_PASSWORD: ${DB_PASSWORD:-1234}
       DB_NAME: cart_db
-      DB_SYNCHRONIZE: 'true'
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      DB_SYNCHRONIZE: 'true' # DEV ONLY — must be false in production, use migrations
+      RABBITMQ_URL: amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASS:-guest}@rabbitmq:5672
       CATALOG_SERVICE_URL: http://catalog-service:3002
     depends_on:
       mysql-cart:
@@ -153,8 +149,6 @@ services:
       context: .
       dockerfile: apps/order-service/Dockerfile
     container_name: ev-order-service
-    ports:
-      - '3004:3004'
     environment:
       PORT: 3004
       DB_HOST: mysql-order
@@ -162,8 +156,8 @@ services:
       DB_USER: ${DB_USER:-root}
       DB_PASSWORD: ${DB_PASSWORD:-1234}
       DB_NAME: order_db
-      DB_SYNCHRONIZE: 'true'
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      DB_SYNCHRONIZE: 'true' # DEV ONLY — must be false in production, use migrations
+      RABBITMQ_URL: amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASS:-guest}@rabbitmq:5672
       CART_SERVICE_URL: http://cart-service:3003
     depends_on:
       mysql-order:
@@ -183,7 +177,8 @@ services:
       - '3000:3000'
     environment:
       PORT: 3000
-      JWT_SECRET: ${JWT_SECRET:-changeme}
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGIN: http://localhost:5173
       USER_SERVICE_URL: http://user-service:3001
       CATALOG_SERVICE_URL: http://catalog-service:3002
       CART_SERVICE_URL: http://cart-service:3003

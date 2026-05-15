@@ -1,3 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Faster+One&family=Overlock:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --font-brand: 'Faster One', cursive;
+  --font-body: 'Overlock', sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+  }
+}
