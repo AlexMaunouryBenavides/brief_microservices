@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { CatalogModule } from './catalog.module';
 import { CarEntity } from './infrastructure/database/entities/CarEntity';
 import { OptionEntity } from './infrastructure/database/entities/OptionEntity';
+import { HealthController } from "./health.controller";
 
 @Module({
   imports: [
@@ -21,6 +22,6 @@ import { OptionEntity } from './infrastructure/database/entities/OptionEntity';
     }),
     CatalogModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, HealthController],
 })
 export class AppModule {}

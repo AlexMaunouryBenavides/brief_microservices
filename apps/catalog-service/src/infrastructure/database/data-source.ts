@@ -8,7 +8,7 @@ export const AppDataSource = new DataSource({
   host: process.env['DB_HOST'] ?? 'localhost',
   port: Number(process.env['DB_PORT']) || 3307,
   username: process.env['DB_USER'] ?? 'root',
-  password: process.env['DB_PASSWORD'] ?? 'root',
+  password: process.env['DB_PASSWORD'] ?? 'Tolteque42',
   database: process.env['DB_NAME'] ?? 'catalog_db',
   entities: [CarEntity, OptionEntity],
   migrations: [__dirname + '/migrations/*.{ts,js}'],
