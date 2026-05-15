@@ -18,10 +18,10 @@ services:
     image: mysql:8.0
     container_name: ev-mysql-user
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-1234}
       MYSQL_DATABASE: user_db
     ports:
-      - '3306:3315'
+      - '3310:3306'
     volumes:
       - mysql_user_data:/var/lib/mysql
     healthcheck:
@@ -34,7 +34,7 @@ services:
     image: mysql:8.0
     container_name: ev-mysql-catalog
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-1234}
       MYSQL_DATABASE: catalog_db
     ports:
       - '3307:3306'
@@ -50,7 +50,7 @@ services:
     image: mysql:8.0
     container_name: ev-mysql-cart
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-1234}
       MYSQL_DATABASE: cart_db
     ports:
       - '3308:3306'
@@ -66,7 +66,7 @@ services:
     image: mysql:8.0
     container_name: ev-mysql-order
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-1234}
       MYSQL_DATABASE: order_db
     ports:
       - '3309:3306'
@@ -91,8 +91,8 @@ services:
       PORT: 3001
       DB_HOST: mysql-user
       DB_PORT: 3306
-      DB_USER: root
-      DB_PASSWORD: root
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-1234}
       DB_NAME: user_db
       DB_SYNCHRONIZE: 'true'
       JWT_SECRET: ${JWT_SECRET:-changeme}
@@ -115,8 +115,8 @@ services:
       PORT: 3002
       DB_HOST: mysql-catalog
       DB_PORT: 3306
-      DB_USER: root
-      DB_PASSWORD: root
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-1234}
       DB_NAME: catalog_db
       DB_SYNCHRONIZE: 'true'
     depends_on:
@@ -135,8 +135,8 @@ services:
       PORT: 3003
       DB_HOST: mysql-cart
       DB_PORT: 3306
-      DB_USER: root
-      DB_PASSWORD: root
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-1234}
       DB_NAME: cart_db
       DB_SYNCHRONIZE: 'true'
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
@@ -159,8 +159,8 @@ services:
       PORT: 3004
       DB_HOST: mysql-order
       DB_PORT: 3306
-      DB_USER: root
-      DB_PASSWORD: root
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-1234}
       DB_NAME: order_db
       DB_SYNCHRONIZE: 'true'
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672

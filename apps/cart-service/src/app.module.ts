@@ -14,7 +14,7 @@ import { CartItemEntity } from './infrastructure/database/entities/CartItemEntit
       host: process.env['DB_HOST'] ?? 'localhost',
       port: Number(process.env['DB_PORT']) || 3308,
       username: process.env['DB_USER'] ?? 'root',
-      password: process.env['DB_PASSWORD'] ?? 'root',
+      password: process.env['DB_PASSWORD'] ?? '1234',
       database: process.env['DB_NAME'] ?? 'cart_db',
       entities: [CartEntity, CartItemEntity],
       synchronize: process.env['DB_SYNCHRONIZE'] === 'true',
