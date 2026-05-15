@@ -9,6 +9,6 @@ export class CartEntity {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  @OneToMany(() => CartItemEntity, (item) => item.cart, { cascade: true, eager: true })
+  @OneToMany(() => CartItemEntity, (item) => item.cart, { cascade: true, eager: true, orphanedRowAction: 'delete' })
   items!: CartItemEntity[];
 }
