@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "chrome-devtools-mcp@latest",
+        "--executablePath", "/snap/bin/chromium",
+        "--chromeArg", "--no-sandbox",
+        "--chromeArg", "--disable-gpu",
+        "--chromeArg", "--disable-dev-shm-usage",
+        "--headless"
+      ]
+    }
+  }
+}

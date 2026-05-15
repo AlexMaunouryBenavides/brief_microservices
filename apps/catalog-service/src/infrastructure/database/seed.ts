@@ -96,8 +96,8 @@ async function seed(): Promise<void> {
   const carRepo = AppDataSource.getRepository(CarEntity);
   const optionRepo = AppDataSource.getRepository(OptionEntity);
 
-  await optionRepo.clear();
-  await carRepo.clear();
+  await AppDataSource.createQueryBuilder().delete().from(OptionEntity).execute();
+  await AppDataSource.createQueryBuilder().delete().from(CarEntity).execute();
 
   for (const spec of EV_CATALOG) {
     const car = carRepo.create({
